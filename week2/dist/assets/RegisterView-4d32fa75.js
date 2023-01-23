@@ -1,0 +1,1 @@
+import{o as e,c as a,a as t,w as r,u as o,R as s,b as c}from"./index-b93486f5.js";const i={__name:"RegisterView",setup(n){return(u,_)=>(e(),a("div",null,[t(o(s),{to:"/dashboard"},{default:r(()=>[c("a")]),_:1})]))}};export{i as default};
