@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
-  base: "/" || "/2022vue3collect/week3/dist",
+  base: "/2022vue3collect/week2/dist",
   plugins: [vue()],
   resolve: {
     alias: {
