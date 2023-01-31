@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "@/views/frontend/HomeView.vue";
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,16 +11,20 @@ const router = createRouter({
         {
           path: "",
           name: "index",
-          component: () => import("../views/IndexView.vue"),
+          component: () => import("@/views/frontend/IndexView.vue"),
         },
         {
           path: "register",
           name: "register",
-          component: () => import("../views/RegisterView.vue"),
+          component: () => import("@/views/frontend/RegisterView.vue"),
+        },
+        {
+          path: "login",
+          name: "login",
+          component: () => import("../views/frontend/loginView.vue"),
         },
       ],
     },
-
     {
       path: "/admin",
       name: "admin",
@@ -28,7 +32,7 @@ const router = createRouter({
       children: [
         {
           path: "",
-          name: "adminindex",
+          name: "admin_index",
           component: () => import("../views/dashboard/DashboardIndex.vue"),
         },
       ],

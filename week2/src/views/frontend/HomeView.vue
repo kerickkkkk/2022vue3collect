@@ -20,17 +20,17 @@ import { RouterLink, RouterView } from "vue-router";
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-            <li v-if="user?.role?.includes('admin')" class="nav-item">
+            <li class="nav-item">
               <router-link class="nav-link" aria-current="page" to="/admin/"
                 >前往後台</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" aria-current="page" to="/products"
+              <router-link class="nav-link" aria-current="page" to="/"
                 >景點</router-link
               >
             </li>
-            <template v-if="user">
+            <template>
               <li class="nav-item">
                 <a
                   @click="logout"
@@ -41,7 +41,7 @@ import { RouterLink, RouterView } from "vue-router";
                 >
               </li>
             </template>
-            <template v-else>
+            <template>
               <li class="nav-item">
                 <router-link to="/login" class="nav-link" aria-current="page"
                   >登入</router-link
