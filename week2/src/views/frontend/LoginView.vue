@@ -10,8 +10,8 @@ const router = useRouter();
 const swal = inject("$swal");
 
 const url = import.meta.env.VITE_BASE_URL;
-const username = ref("howcrazys@gmail.com");
-const password = ref("hex123456");
+const username = ref("");
+const password = ref("");
 
 const submitHandler = () => {
   const params = {
