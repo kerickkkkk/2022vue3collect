@@ -33,8 +33,8 @@ const getPage = (page) => {
 </script>
 
 <template>
-  <nav aria-label="Page navigation justify-content-center">
-    <ul class="pagination">
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
       <li :class="{ disabled: !props.has_pre }" class="page-item">
         <a
           @click.prevent="
