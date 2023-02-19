@@ -9,11 +9,14 @@ const statusStore = useStatusStore();
 const fullPage = ref(true);
 const { getIsLoading } = storeToRefs(statusStore);
 const isLoading = computed(() => getIsLoading);
-console.log(isLoading.value);
 </script>
 
 <template>
-  <Loading v-model:active="isLoading" :is-full-page="fullPage" />
+  <Loading v-model:active="isLoading" :is-full-page="fullPage">
+    <template v-slot:default>
+      <img width="100" src="./assets/loading.svg" alt="" />
+    </template>
+  </Loading>
   <RouterView />
 </template>
 
