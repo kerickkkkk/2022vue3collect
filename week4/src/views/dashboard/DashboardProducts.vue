@@ -47,6 +47,7 @@ const getProducts = (page) => {
       pagination.value = data.pagination;
     })
     .catch((error) => {
+      setLoading(false);
       console.dir(error);
       swal(error?.response?.data);
       // 在確認沒有權限的寫法
@@ -78,7 +79,7 @@ const addEditProduct = (id) => {
       ? `${baseUrl}/api/${apiPath}/admin/product`
       : `${baseUrl}/api/${apiPath}/admin/product/${id}`;
   const data = { data: tempProduct.value };
-  statusStore.setLoading(true);
+  setLoading(true);
   axios({
     method,
     url,
@@ -86,6 +87,7 @@ const addEditProduct = (id) => {
   })
     .then(({ data }) => {
       if (data.success) {
+        setLoading(false);
         swal(data.message);
         resetProduct();
         getProducts();
@@ -94,9 +96,9 @@ const addEditProduct = (id) => {
     })
     .catch((error) => {
       console.dir(error);
+      setLoading(false);
       // 在確認沒有權限的寫法
-    })
-    .finally(() => statusStore.setLoading(false));
+    });
 };
 const delProduct = (id) => {
   setLoading(true);
@@ -106,6 +108,7 @@ const delProduct = (id) => {
   })
     .then(({ data }) => {
       if (data.success) {
+        setLoading(false);
         swal(data.message);
         resetProduct();
         getProducts();
@@ -114,8 +117,8 @@ const delProduct = (id) => {
     })
     .catch((error) => {
       console.dir(error);
-    })
-    .finally(() => setLoading(false));
+      setLoading(false);
+    });
 };
 const resetProduct = () => {
   tempProduct.value = { ...productObj };
