@@ -8,7 +8,9 @@ import { useStatusStore } from "@/stores/statusStore.js";
 const statusStore = useStatusStore();
 const fullPage = ref(true);
 const { getIsLoading } = storeToRefs(statusStore);
-const isLoading = computed(() => getIsLoading);
+// 回傳 computed 需加上 .value
+// runtime-core.esm-bundler.js:40 [Vue warn]: Invalid prop: type check failed for prop "active". Expected Boolean, got Object
+const isLoading = computed(() => getIsLoading.value);
 </script>
 
 <template>

@@ -5,7 +5,9 @@ export const useStatusStore = defineStore("status", {
   }),
 
   getters: {
-    getIsLoading: ({ isLoading }) => isLoading,
+    getIsLoading: ({ isLoading }) => {
+      return isLoading;
+    },
   },
   actions: {
     setLoading(status) {

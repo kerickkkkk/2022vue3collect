@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
 import axios from "axios";
 import Modal from "bootstrap/js/dist/modal";
 import { useStatusStore } from "@/stores/statusStore.js";
@@ -10,30 +10,40 @@ const { setLoading } = statusStore;
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const apiPath = import.meta.env.VITE_PATH;
 
-const productModalDom = ref(null);
-
-const props = defineProps({
-  tempProduct: {
-    type: Object,
-    default() {
-      return {};
-    },
-  },
-  modalType: {
-    type: String,
-    default() {
-      return {};
-    },
-  },
+const productModal = ref(null);
+const tempProduct = ref({
+  // 避免多一層會有錯誤
+  imageUrl: "",
 });
+// 暫存多圖的連結
+const imagesUrl = ref("");
+const modalType = ref("");
+const emit = defineEmits(["getProducts"]);
+const show = (product, type) => {
+  productModal.value.show();
+  modalType.value = type;
+  tempProduct.value = product;
+};
+
+const addImagesUrl = () => {
+  if (tempProduct.value.imagesUrl) {
+    tempProduct.value.imagesUrl.push(imagesUrl.value);
+  } else {
+    tempProduct.value.imagesUrl = [imagesUrl.value];
+  }
+  imagesUrl.value = "";
+};
+const delImagesUrl = (index) => {
+  tempProduct.value.imagesUrl.splice(index, 1);
+};
 
 const addEditProduct = (id) => {
-  const method = props.modalType.value === "new" ? "post" : "put";
+  const method = modalType.value === "new" ? "post" : "put";
   const url =
-    props.modalType.value === "new"
+    modalType.value === "new"
       ? `${baseUrl}/api/${apiPath}/admin/product`
       : `${baseUrl}/api/${apiPath}/admin/product/${id}`;
-  const data = { data: props.product };
+  const data = { data: tempProduct.value };
   setLoading(true);
   axios({
     method,
@@ -43,10 +53,12 @@ const addEditProduct = (id) => {
     .then(({ data }) => {
       if (data.success) {
         setLoading(false);
-        swal(data.message);
-        resetProduct();
-        getProducts();
+        emit("getProducts");
         productModal.value.hide();
+        swal(data.message);
+        // 集中到 getProducts 內 resetProduct
+        // resetProduct();
+        // getProducts();
       }
     })
     .catch((error) => {
@@ -56,11 +68,19 @@ const addEditProduct = (id) => {
     });
 };
 
+onMounted(() => {
+  // 從 cookie 取出
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("ttShopToken="))
+    ?.split("=")[1];
 
-
-
-
-
+  // 存取 ID 只會掛載一次
+  productModal.value = new Modal("#productModal");
+  axios.defaults.headers.common["Authorization"] = token;
+});
+// 開放方法使用
+defineExpose({ show });
 </script>
 <template>
   <div
@@ -91,6 +111,7 @@ const addEditProduct = (id) => {
                 <div class="mb-3">
                   <label for="imageUrl" class="form-label">輸入圖片網址</label>
                   <input
+                    id="imageUrl"
                     v-model="tempProduct.imageUrl"
                     type="text"
                     class="form-control"
@@ -101,8 +122,9 @@ const addEditProduct = (id) => {
               </div>
               <div class="mb-2">
                 <div class="mb-3">
-                  <label for="imageUrl" class="form-label">輸入子圖片組</label>
+                  <label for="imagesUrl" class="form-label">輸入子圖片組</label>
                   <input
+                    id="imagesUrl"
                     v-model="imagesUrl"
                     type="text"
                     class="form-control"
@@ -136,11 +158,6 @@ const addEditProduct = (id) => {
                   新增圖片
                 </button>
               </div>
-              <!-- <div>
-                  <button class="btn btn-outline-danger btn-sm d-block w-100">
-                    刪除圖片
-                  </button>
-                </div> -->
             </div>
             <div class="col-sm-8">
               <div class="mb-3">
@@ -153,7 +170,6 @@ const addEditProduct = (id) => {
                   placeholder="請輸入標題"
                 />
               </div>
-
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label for="category" class="form-label">分類</label>
