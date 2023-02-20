@@ -76,7 +76,10 @@ onMounted(() => {
     ?.split("=")[1];
 
   // 存取 ID 只會掛載一次
-  productModal.value = new Modal("#productModal");
+  productModal.value = new Modal("#productModal", {
+    // 避免連點的時候 有 Uncaught RangeError: Maximum call stack size exceeded.
+    focus: false,
+  });
   axios.defaults.headers.common["Authorization"] = token;
 });
 // 開放方法使用

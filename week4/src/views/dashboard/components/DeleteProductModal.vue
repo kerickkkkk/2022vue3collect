@@ -46,7 +46,9 @@ onMounted(() => {
     ?.split("=")[1];
 
   // 存取 ID 只會掛載一次 是否要改更通用的 或者在抽出一層
-  deleteProductModal.value = new Modal("#deleteProductModalDom");
+  deleteProductModal.value = new Modal("#deleteProductModalDom", {
+    focus: false,
+  });
   axios.defaults.headers.common["Authorization"] = token;
 });
 // 開放方法使用
