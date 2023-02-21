@@ -222,17 +222,19 @@ defineExpose({ show });
               </div>
               <div class="row">
                 <div class="col-6">
-                  <h6>星等</h6>
-                  <div class="rating">
-                    <span
-                      class="star"
-                      :class="{ 'bg-warning': n <= tempProduct.star }"
-                      v-for="n in 5"
-                      :key="n"
-                      @click="tempProduct.star = n"
-                    ></span>
+                  <div class="d-flex">
+                    <h6>星等：</h6>
+                    <div class="rating">
+                      <span
+                        class="star"
+                        :class="{ active: n <= tempProduct.star }"
+                        v-for="n in 5"
+                        :key="n"
+                        @click="tempProduct.star = n"
+                      ></span>
 
-                    <input type="hidden" v-model="tempProduct.star" />
+                      <input type="hidden" v-model="tempProduct.star" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -315,6 +317,12 @@ img {
 .rating {
   display: flex;
   justify-content: center;
+  &:hover > .star {
+    background-color: gold;
+  }
+  > .star:hover ~ .star {
+    background-color: lightgray;
+  }
 }
 
 :deep(.star) {
@@ -347,6 +355,8 @@ img {
     39% 35%
   );
   cursor: pointer;
-  // hover 的要再看看
+  &.active {
+    background-color: gold;
+  }
 }
 </style>
