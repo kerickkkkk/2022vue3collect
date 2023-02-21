@@ -220,6 +220,22 @@ defineExpose({ show });
                   />
                 </div>
               </div>
+              <div class="row">
+                <div class="col-6">
+                  <h6>星等</h6>
+                  <div class="rating">
+                    <span
+                      class="star"
+                      :class="{ 'bg-warning': n <= tempProduct.star }"
+                      v-for="n in 5"
+                      :key="n"
+                      @click="tempProduct.star = n"
+                    ></span>
+
+                    <input type="hidden" v-model="tempProduct.star" />
+                  </div>
+                </div>
+              </div>
               <hr />
 
               <div class="mb-3">
@@ -295,5 +311,42 @@ img {
 
 .images {
   height: 150px;
+}
+.rating {
+  display: flex;
+  justify-content: center;
+}
+
+:deep(.star) {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: lightgray;
+  -webkit-clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  cursor: pointer;
+  // hover 的要再看看
 }
 </style>
