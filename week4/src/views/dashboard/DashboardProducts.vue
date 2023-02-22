@@ -6,6 +6,7 @@ import Pagination from "../../components/base/PaginationComponent.vue";
 import { useStatusStore } from "@/stores/statusStore.js";
 import AddEditProductModal from "./components/AddEditProductModal.vue";
 import DeleteProductModal from "./components/DeleteProductModal.vue";
+import UploadImageModal from "../../components/modal/UploadImageModal.vue";
 const router = useRouter();
 const statusStore = useStatusStore();
 const swal = inject("$swal");
@@ -35,6 +36,7 @@ const modalType = ref("");
 // const productModalDom = ref(null);
 const addEditProductRef = ref(null);
 // const productModal = ref(null);
+const uploadImageRef = ref(null);
 const deleteProductRef = ref(null);
 const getProducts = (page = 1) => {
   resetProduct();
@@ -58,6 +60,9 @@ const getProducts = (page = 1) => {
 // const getProduct = (id) => {
 //   tempProduct.value = products.value.find((item) => item.id === id);
 // };
+const openUploadModal = () => {
+  uploadImageRef.value.show();
+};
 const openModalHandler = (type, product) => {
   modalType.value = type;
   if (type === "new") {
@@ -134,6 +139,9 @@ onMounted(() => {
 <template>
   <div class="container">
     <div class="text-end mt-4">
+      <button @click="openUploadModal" class="btn btn-primary me-3">
+        上傳圖片
+      </button>
       <button @click="openModalHandler('new')" class="btn btn-primary">
         建立新的產品
       </button>
@@ -201,6 +209,7 @@ onMounted(() => {
     ref="deleteProductRef"
     @get-products="getProducts"
   ></DeleteProductModal>
+  <UploadImageModal ref="uploadImageRef"></UploadImageModal>
   <!-- Modal -->
 </template>
 
