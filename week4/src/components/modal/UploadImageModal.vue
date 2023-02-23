@@ -37,7 +37,6 @@ const uploadFile = () => {
   setImage(file.value)
     .then(({ data }) => {
       setLoading(false);
-      console.dir(data.imageUrl);
       finishUrl.value = data.imageUrl;
     })
     .catch((error) => {
