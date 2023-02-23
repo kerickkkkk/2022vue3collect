@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted, inject } from "vue";
+import { ref, shallowRef, computed, onMounted, onUnmounted, inject } from "vue";
+import { storeToRefs } from "pinia";
 import axios from "axios";
 import Modal from "bootstrap/js/dist/modal";
 import { useStatusStore } from "@/stores/statusStore.js";
@@ -7,7 +8,10 @@ import { useUploadImagesStore } from "@/stores/uploadImagesStore.js";
 
 const statusStore = useStatusStore();
 const uploadImagesStore = useUploadImagesStore();
-const { setImage } = uploadImagesStore;
+const { getImagesUrl, setImage, updateImagesUrl, deleteImageUrl } =
+  uploadImagesStore;
+// getters 要用 storeToRefs
+const { gettersImagesUrl } = storeToRefs(uploadImagesStore);
 const swal = inject("$swal");
 const { setLoading } = statusStore;
 
@@ -17,12 +21,14 @@ const modal = ref(null);
 const tempUrl = ref("");
 const finishUrl = ref("");
 const file = ref(null);
+const finishUrlDom = shallowRef(null);
+const imagesUrl = computed(() => gettersImagesUrl.value);
+const imagesUrlRefs = shallowRef([]);
 // 暫存多圖的連結
 const show = () => {
   modal.value.show();
 };
 const uploadFile = () => {
-  console.log("uploadFile", file.value);
   if (!file.value) {
     swal("檔案不得為空");
     return false;
@@ -48,6 +54,34 @@ const fileOnLoadHandler = (e) => {
   tempUrl.value = e.target.result;
 };
 
+const copyFinishUrl = () => {
+  finishUrlDom.value.select();
+  document.execCommand("copy");
+  swal({
+    text: "已複製",
+    customClass: {
+      container: "position-absolute",
+    },
+    toast: true,
+    showConfirmButton: false,
+    position: "bottom-right",
+    timer: 1500,
+  });
+};
+const copyImagesUrl = (index) => {
+  imagesUrlRefs.value[index].select();
+  document.execCommand("copy");
+  swal({
+    text: "已複製",
+    customClass: {
+      container: "position-absolute",
+    },
+    toast: true,
+    showConfirmButton: false,
+    position: "bottom-right",
+    timer: 1500,
+  });
+};
 onMounted(() => {
   // 從 cookie 取出
   const token = document.cookie
@@ -61,6 +95,7 @@ onMounted(() => {
     focus: false,
   });
   axios.defaults.headers.common["Authorization"] = token;
+  getImagesUrl();
   reader.addEventListener("load", fileOnLoadHandler);
 });
 
@@ -119,14 +154,61 @@ defineExpose({ show });
             </div>
             <div class="col-6">
               <h3>上傳完成</h3>
-              <button class="btn btn-sm btn-primary">儲存連結</button>
+              <button
+                @click="copyFinishUrl"
+                class="btn btn-sm btn-primary me-2"
+                :disabled="finishUrl === ''"
+              >
+                複製上傳連結
+              </button>
+              <button
+                @click="updateImagesUrl(finishUrl, true)"
+                class="btn btn-sm btn-primary"
+                :disabled="finishUrl === ''"
+              >
+                儲存上傳連結
+              </button>
+              <!-- disabled 會無法 focus 改用 readonly -->
+              <input
+                ref="finishUrlDom"
+                type="text"
+                v-model="finishUrl"
+                placeholder="上傳後的圖片連結"
+                readonly="readonly"
+              />
               <img v-if="finishUrl" :src="finishUrl" alt="" />
             </div>
             <hr />
             <div class="row">
               <h3>儲存圖片的連結(點選取得連結)</h3>
               <div class="row">
-                <div class="col-3"></div>
+                <div
+                  v-for="(url, index) in imagesUrl"
+                  :key="url"
+                  class="position-relative col-4"
+                >
+                  <div class="px-1 py-2">
+                    <input
+                      :ref="(element) => (imagesUrlRefs[index] = element)"
+                      :value="url"
+                      type="text"
+                      readonly="readonly"
+                    />
+                    <button
+                      class="btn btn-sm btn-primary"
+                      @click="copyImagesUrl(index)"
+                    >
+                      點擊複製
+                    </button>
+                    <img class="img-fluid" :src="url" alt="" />
+                    <button
+                      class="btn btn-outline-primary rounded-circle position-absolute top-0 end-0 py-1 px-2"
+                      @click="deleteImageUrl(index)"
+                    >
+                      X
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
