@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from "vue-router";
   <div>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
       <div class="container-fluid">
-        <router-link class="navbar-brand" to="/">首頁</router-link>
+        <router-link class="navbar-brand" to="/admin">首頁</router-link>
         <button
           class="navbar-toggler"
           type="button"
