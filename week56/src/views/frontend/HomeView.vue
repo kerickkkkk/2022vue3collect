@@ -26,8 +26,8 @@ import { RouterLink, RouterView } from "vue-router";
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" aria-current="page" to="/"
-                >景點</router-link
+              <router-link class="nav-link" aria-current="page" to="/cart"
+                >購物車(驗證練習)</router-link
               >
             </li>
             <template>
