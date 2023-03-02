@@ -35,10 +35,6 @@ const getProducts = () => {
       swal(error?.response?.data);
     });
 };
-// const getProductDetail = () => {};
-
-// const addCart = () => {};
-
 const submitOrder = () => {
   console.log("submitOrder");
 };

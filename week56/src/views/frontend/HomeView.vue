@@ -1,5 +1,16 @@
 <script setup>
+import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import { RouterLink, RouterView } from "vue-router";
+import { useCartsStore } from "../../stores/cartsStore";
+
+const cartsStore = useCartsStore();
+const { getCarts } = cartsStore;
+const { cartsGetter: carts } = storeToRefs(cartsStore);
+
+onMounted(() => {
+  getCarts();
+});
 </script>
 
 <template>
@@ -31,9 +42,25 @@ import { RouterLink, RouterView } from "vue-router";
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" aria-current="page" to="/cart"
-                >購物車(驗證練習)</router-link
+              <router-link class="nav-link" aria-current="page" to="/messages"
+                >最新消息</router-link
               >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" aria-current="page" to="/about"
+                >關於我們</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" aria-current="page" to="/likes"
+                >我的最愛</router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" aria-current="page" to="/cart"
+                >購物車(驗證練習)
+                {{ carts?.length }}
+              </router-link>
             </li>
             <template>
               <li class="nav-item">

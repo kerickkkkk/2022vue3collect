@@ -3,11 +3,15 @@ import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { useStatusStore } from "@/stores/statusStore.js";
+import { useCartsStore } from "../../stores/cartsStore";
 
 const route = useRoute();
 const statusStore = useStatusStore();
+const cartStore = useCartsStore();
 const { setLoading } = statusStore;
 const swal = inject("$swal");
+const { addCart } = cartStore;
+const qty = ref(1);
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const apiPath = import.meta.env.VITE_PATH;
@@ -29,8 +33,13 @@ const getProduct = (id) => {
     });
 };
 
-const addCart = () => {};
-
+const numCountHandler = (type) => {
+  if (type === "minus") {
+    qty.value = qty.value > 0 ? qty.value - 1 : 0;
+  } else if (type === "plus") {
+    qty.value += 1;
+  }
+};
 onMounted(() => {
   const { id } = route.params;
   getProduct(id);
@@ -68,7 +77,7 @@ onMounted(() => {
                 aria-label="Basic checkbox toggle button group"
               >
                 <button
-                  :disabled="product.num < 2"
+                  :disabled="qty < 2"
                   type="button"
                   class="btn btn-primary"
                   @click="numCountHandler('minus')"
@@ -76,7 +85,7 @@ onMounted(() => {
                   -
                 </button>
                 <input
-                  v-model.number="product.num"
+                  v-model.number="qty"
                   type="number"
                   min="1"
                   class="form-control rounded-0"
@@ -85,7 +94,7 @@ onMounted(() => {
                 <button
                   type="button"
                   class="btn btn-primary"
-                  @click="numCountHandler('pluse')"
+                  @click="numCountHandler('plus')"
                 >
                   +
                 </button>
@@ -114,7 +123,7 @@ onMounted(() => {
             <div class="d-flex justify-content-end">
               <div
                 class="btn btn-outline-primary me-2"
-                @click.prevent.stop="addCart"
+                @click.prevent.stop="addCart(product.id, product.num)"
               >
                 加入購物車
               </div>
