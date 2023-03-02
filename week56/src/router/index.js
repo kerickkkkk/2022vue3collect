@@ -14,14 +14,29 @@ const router = createRouter({
           component: () => import("@/views/frontend/IndexView.vue"),
         },
         {
-          path: "register",
-          name: "register",
-          component: () => import("@/views/frontend/RegisterView.vue"),
-        },
-        {
           path: "login",
           name: "login",
           component: () => import("../views/frontend/LoginView.vue"),
+        },
+        {
+          path: "about",
+          name: "about",
+          component: () => import("@/views/frontend/AboutView.vue"),
+        },
+        {
+          path: "messages",
+          name: "messages",
+          component: () => import("@/views/frontend/MessagesView.vue"),
+        },
+        {
+          path: "message/:id",
+          name: "message",
+          component: () => import("@/views/frontend/MessagesView.vue"),
+        },
+        {
+          path: "likes",
+          name: "likes",
+          component: () => import("@/views/frontend/LikesView.vue"),
         },
         {
           path: "products",
@@ -59,5 +74,13 @@ const router = createRouter({
     },
   ],
 });
+
+// router.beforeEach((to, from, next) => {
+//   // 路由切換修改 title 
+//   if (to.meta.title) {
+//       document.title = to.meta.title
+//   }
+//   next()
+// })
 
 export default router;
