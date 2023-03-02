@@ -2,40 +2,48 @@
 import { ref, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { storeToRefs } from "pinia";
 import Pagination from "../../components/base/PaginationComponent.vue";
 import { useStatusStore } from "@/stores/statusStore.js";
+import { useProductsStore } from "../../stores/productsStore";
+import { useCartsStore } from "../../stores/cartsStore";
 
 const router = useRouter();
 const statusStore = useStatusStore();
+const cartStore = useCartsStore();
+const productsStore = useProductsStore();
+const { addCart } = cartStore;
+const { getProducts } = productsStore;
+const { productsGetter: products, paginationGetter: pagination } =
+  storeToRefs(productsStore);
+
 const { setLoading } = statusStore;
 const swal = inject("$swal");
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const apiPath = import.meta.env.VITE_PATH;
 const loadingBlock = ref(false);
-const products = ref([]);
-const pagination = ref(null);
+//
+// const products = ref([]);
+// const pagination = ref(null);
 
-const getProducts = (page = 1) => {
-  // 1. 關於分頁元件，如當前頁面為產品列表第一頁，可以將分頁的第一頁的按鈕設置為不可點擊(或使用 return 跳出函式)，
-  // 避免發出重複的 API 請求。當前是第二頁的話，就將第二頁分頁設置為不可點擊...以此類推
-  if (page === pagination.value?.current_page) {
-    return false;
-  }
-  setLoading(true);
-  axios
-    .get(`${baseUrl}/api/${apiPath}/products?page=${page}`)
-    .then(({ data }) => {
-      setLoading(false);
-      products.value = data.products;
-      pagination.value = data.pagination;
-    })
-    .catch((error) => {
-      setLoading(false);
-      console.dir(error);
-      swal(error?.response?.data);
-    });
-};
+// const getProducts = (page = 1) => {
+// 1. 關於分頁元件，如當前頁面為產品列表第一頁，可以將分頁的第一頁的按鈕設置為不可點擊(或使用 return 跳出函式)，
+// 避免發出重複的 API 請求。當前是第二頁的話，就將第二頁分頁設置為不可點擊...以此類推
+// setLoading(true);
+// axios
+//   .get(`${baseUrl}/api/${apiPath}/products?page=${page}`)
+//   .then(({ data }) => {
+//     setLoading(false);
+//     products.value = data.products;
+//     pagination.value = data.pagination;
+//   })
+//   .catch((error) => {
+//     setLoading(false);
+//     console.dir(error);
+//     swal(error?.response?.data);
+//   });
+// };
 const getProductDetail = (id) => {
   setLoading(true);
   axios
@@ -52,8 +60,6 @@ const getProductDetail = (id) => {
       swal(error?.response?.data);
     });
 };
-
-const addCart = () => {};
 
 onMounted(() => {
   getProducts();
@@ -103,7 +109,7 @@ onMounted(() => {
                 看詳細
               </button>
               <button
-                @click="addCart(item.id)"
+                @click="addCart(item.id, 1)"
                 class="btn btn-danger"
                 type="button"
               >
