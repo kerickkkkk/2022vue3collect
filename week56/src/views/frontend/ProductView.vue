@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted, inject } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { useStatusStore } from "@/stores/statusStore.js";
 import { useCartsStore } from "../../stores/cartsStore";
 
 const route = useRoute();
+const router = useRouter();
 const statusStore = useStatusStore();
 const cartStore = useCartsStore();
 const { setLoading } = statusStore;
@@ -40,6 +41,10 @@ const numCountHandler = (type) => {
     qty.value += 1;
   }
 };
+const goCheckout = () => {
+  router.push({ name: "cart" });
+};
+
 onMounted(() => {
   const { id } = route.params;
   getProduct(id);
@@ -130,7 +135,7 @@ onMounted(() => {
               <button
                 type="button"
                 class="btn btn-primary"
-                @click.prevent="addCart(true)"
+                @click.prevent="goCheckout"
               >
                 直接結帳
               </button>
