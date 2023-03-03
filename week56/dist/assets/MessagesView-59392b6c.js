@@ -1,0 +1,1 @@
+import{_ as e}from"./plugin-vueexport-helper-c27b6911.js";import{o as c,c as o}from"./index-907ac9d8.js";const r={};function n(s,t){return c(),o("main",null,"最新消息")}const f=e(r,[["render",n]]);export{f as default};

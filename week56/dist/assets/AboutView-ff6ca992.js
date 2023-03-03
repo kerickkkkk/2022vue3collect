@@ -1,0 +1,1 @@
+import{_ as e}from"./plugin-vueexport-helper-c27b6911.js";import{o,c}from"./index-907ac9d8.js";const r={};function t(n,a){return o(),c("main",null,"關於我們")}const f=e(r,[["render",t]]);export{f as default};
