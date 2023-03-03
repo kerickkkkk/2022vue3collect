@@ -20,10 +20,10 @@ export function postCartsApi(id, qty) {
   });
 }
 
-export function putCartApi(id, qty) {
+export function putCartApi(cartId, id, qty) {
   return service({
     method: "PUT",
-    url: `/cart/${id}`,
+    url: `/cart/${cartId}`,
     data: {
       data: {
         product_id: id,
@@ -33,14 +33,14 @@ export function putCartApi(id, qty) {
   });
 }
 
-export function deleteCartApi(id) {
+export function deleteCartApi(cartId) {
   return service({
     method: "DELETE",
-    url: `/cart/${id}`,
+    url: `/cart/${cartId}`,
   });
 }
 
-export function deleteCartstApi() {
+export function deleteAllCartsApi() {
   return service({
     method: "DELETE",
     url: `/carts`,
