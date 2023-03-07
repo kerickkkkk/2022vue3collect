@@ -47,14 +47,20 @@ const getPage = (page) => {
         </a>
       </li>
       <li
-        v-for="(n, i) in props.total_pages"
+        v-for="n in props.total_pages"
         :key="n"
         :class="{
-          active: i === current_page - 1,
+          active: n === props.current_page,
         }"
         class="page-item"
       >
-        <a @click.prevent="getPage(n)" class="page-link" href="#">{{ n }}</a>
+        <!-- 修正 會重複觸發  以 css 觸發-->
+        <a
+          :disabled="n === props.current_page && 'disabled'"
+          @click.prevent="getPage(n)"
+          class="page-link"
+          >{{ n }}</a
+        >
       </li>
       <li :class="{ disabled: !props.has_next }" class="page-item">
         <a
@@ -76,4 +82,12 @@ const getPage = (page) => {
   </nav>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+// 處理 觸發 與 樣式
+a[disabled="disabled"] {
+  pointer-events: none;
+}
+a:not([disabled="disabled"]) {
+  cursor: pointer;
+}
+</style>
