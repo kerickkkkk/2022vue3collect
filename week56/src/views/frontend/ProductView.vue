@@ -23,7 +23,6 @@ const getProduct = (id) => {
   axios
     .get(`${baseUrl}/api/${apiPath}/product/${id}`)
     .then(({ data }) => {
-      console.log(data);
       product.value = data.product;
       setLoading(false);
     })
