@@ -96,7 +96,12 @@ onMounted(() => {
       <!-- 購物車區塊 -->
       <div class="row">
         <div class="text-end">
-          <button @click="deleteAllCarts" class="btn btn-sm btn-outline-danger">
+          <!-- 購物車頁面，當購物車內沒有產品時，可以讓「清空購物車」按鈕不顯示，或是讓按鈕呈現無法點擊的狀態 -->
+          <button
+            :disabled="carts.length <= 0"
+            @click="deleteAllCarts"
+            class="btn btn-sm btn-outline-danger"
+          >
             清空購物車
           </button>
         </div>
