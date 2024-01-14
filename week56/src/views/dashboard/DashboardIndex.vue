@@ -8,7 +8,7 @@ const swal = inject("$swal");
 
 const url = import.meta.env.VITE_BASE_URL;
 const apiPath = import.meta.env.VITE_PATH;
-// 測試 revert
+
 const products = ref([]);
 const tempProduct = ref({});
 const checkLogin = () => {
